@@ -3,12 +3,15 @@
 
 @implementation HomeIndicatorViewController
 
-- (BOOL)prefersHomeIndicatorAutoHidden {
-    return self.prefersAutoHidden;
+//- (BOOL)prefersHomeIndicatorAutoHidden {
+//    return self.prefersAutoHidden;
+//}
+
+- (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
+    return self.prefersAutoHidden ? UIRectEdgeBottom : UIRectEdgeNone;
 }
 
 @end
-
 
 @implementation RNHomeIndicator
 
@@ -21,17 +24,21 @@
     HomeIndicatorViewController *rootViewController = [self getHomeIndicatorViewController];
 
     rootViewController.prefersAutoHidden = newValue;
+
     if (@available(iOS 11.0, *)) {
         [rootViewController setNeedsUpdateOfHomeIndicatorAutoHidden];
+        [rootViewController setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
     }
 }
 
 - (HomeIndicatorViewController*) getHomeIndicatorViewController {
     UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+  
     NSAssert(
         [rootViewController isKindOfClass:[HomeIndicatorViewController class]],
         @"rootViewController is not of type HomeIndicatorViewController as expected."
     );
+  
     return (HomeIndicatorViewController*) rootViewController;
 }
 
